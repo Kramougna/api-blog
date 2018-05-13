@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 
 // create express app
@@ -10,6 +11,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // parse requests of content-type - application/json
 app.use(bodyParser.json())
 
+app.use(cors());
+
 // Configuring the database
 const dbConfig = require('./config/database.config.js');
 const mongoose = require('mongoose');
@@ -17,7 +20,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 // Connecting to the database
-mongoose.connect(dbConfig.url)
+mongoose.connect(dbConfig.url, dbConfig.options)
 .then(() => {
     console.log("Successfully connected to the database");
 }).catch(err => {
@@ -30,7 +33,7 @@ require('./routes/article.routes.js')(app);
 
 // define a simple route
 app.get('/', (req, res) => {
-    res.json({"message": "Welcome to EasyNotes application. Take notes quickly. Organize and keep track of all your notes."});
+    res.json({"message": "Welcome"});
 });
 
 // listen for requests
